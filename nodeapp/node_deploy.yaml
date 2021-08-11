@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-deployment
+  labels:
+    app: nodejs
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nodejs
+  template:
+    metadata:
+      labels:
+        app: nodejs
+    spec:
+      containers:
+      - name: nodejs
+        image: paku/node-web-app:latest
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-service
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "clb"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+spec:
+  type: NodePort
+  externalTrafficPolicy: Local
+  selector:
+    app: nodejs
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    name: http
