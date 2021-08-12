@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: nodejs
-        image: paku/node-web-app:latest
+        image: pcl-harbor.sktelecom.com/paku/node-web-app:latest
         ports:
         - containerPort: 8080
         imagePullPolicy: Always
